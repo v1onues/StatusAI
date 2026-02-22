@@ -37,10 +37,15 @@ from ai_engine import generate_status, get_stats
 # ──────────────────────────────────────────────
 #  Constants
 # ──────────────────────────────────────────────
+# Determine the true base directory (where the .exe is running from, not the Temp extraction folder)
+if getattr(sys, "frozen", False):
+    BASE_DIR = Path(sys.executable).parent
+else:
+    BASE_DIR = Path(__file__).parent
 
 VERSION = "3.0.0"
-CONFIG_FILE = Path(__file__).parent / "config.json"
-LOG_FILE = Path(__file__).parent / "status_history.log"
+CONFIG_FILE = BASE_DIR / "config.json"
+LOG_FILE = BASE_DIR / "status_history.log"
 PORT = 3131
 
 PERSONA_ICONS = {
