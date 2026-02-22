@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StatusAI — Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════════
+           RESET & BASE
+           ═══════════════════════════════════════════════ */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            /* Siyah/Beyaz Theme (Dark) 8-Bit */
+            --bg-deep: #000000;
+            --bg-card: #000000;
+            --bg-card-solid: #000000;
+            --bg-hover: #ffffff;
+            --border: #ffffff;
+            --border-active: #ffffff;
+            --accent: #ffffff;
+            --accent-bright: #ffffff;
+            --accent-dim: #ffffff;
+            --neon: #ffffff;
+            --green: #ffffff;
+            --red: #ffffff;
+            --yellow: #ffffff;
+            --text: #ffffff;
+            --text-dim: #ffffff;
+            --text-muted: #aaaaaa;
+            --radius: 0px;
+            --radius-sm: 0px;
+            --glow: 4px 4px 0px 0px var(--border);
+            --glow-strong: 6px 6px 0px 0px var(--border);
+            --transition: none;
+            --form-input-bg: #000000;
+            --log-bg-start: #000000;
+            --sidebar-bg: #000000;
+        }
+
+        :root[data-theme="light"] {
+            /* Beyaz/Siyah Theme (Light) 8-Bit */
+            --bg-deep: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-solid: #ffffff;
+            --bg-hover: #000000;
+            --border: #000000;
+            --border-active: #000000;
+            --accent: #000000;
+            --accent-bright: #000000;
+            --accent-dim: #000000;
+            --neon: #000000;
+            --green: #000000;
+            --red: #000000;
+            --yellow: #000000;
+            --text: #000000;
+            --text-dim: #000000;
+            --text-muted: #555555;
+            --glow: 4px 4px 0px 0px var(--border);
+            --glow-strong: 6px 6px 0px 0px var(--border);
+            --form-input-bg: #ffffff;
+            --log-bg-start: #ffffff;
+            --sidebar-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            background: var(--bg-deep);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* ═══════════════════════════════════════════════
+           SIDEBAR
+           ═══════════════════════════════════════════════ */
+        .sidebar {
+            width: 64px;
+            min-width: 64px;
+            height: 100vh;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 0;
+            gap: 6px;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-deep);
+            border: 2px solid var(--border);
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-shadow: 2px 2px 0px 0px var(--border);
+            color: var(--text);
+        }
+
+        .nav-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-btn:hover {
+            background: var(--text);
+            color: var(--bg-deep);
+            box-shadow: 2px 2px 0px 0px var(--border);
+        }
+
+        .nav-btn.active {
+            background: var(--text);
+            color: var(--bg-deep);
+            border: 2px solid var(--border);
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        /* ═══════════════════════════════════════════════
+           MAIN CONTENT
+           ═══════════════════════════════════════════════ */
+        .main {
+            flex: 1;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 24px 32px;
+            background: var(--bg-deep);
+        }
+
+        .main::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .main::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .main::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: 0px;
+            border: 1px solid var(--border);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0px var(--text-muted);
+        }
+
+        .page-title span {
+            color: var(--accent);
+        }
+
+        /* ═══════════════════════════════════════════════
+           CARDS — Glassmorphism
+           ═══════════════════════════════════════════════ */
+        .card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--glow);
+            transition: none;
+        }
+
+        .card:hover {
+            box-shadow: var(--glow-strong);
+            transform: translate(-2px, -2px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+        }
+
+        .hero-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            padding: 32px;
+            box-shadow: var(--glow);
+        }
+
+        .hero-card:hover {
+            box-shadow: var(--glow-strong);
+            transform: translate(-2px, -2px);
+        }
+
+        .hero-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero-status {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .status-dot {
+            width: 14px;
+            height: 14px;
+            background: var(--text);
+            animation: blink 1s step-end infinite;
+        }
+
+        .status-dot.inactive {
+            background: var(--text-muted);
+            animation: none;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .status-label {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .status-label small {
+            font-size: 13px;
+            color: var(--text-dim);
+            font-weight: 400;
+            margin-left: 8px;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            position: relative;
+            width: 56px;
+            height: 28px;
+            cursor: pointer;
+        }
+
+        .toggle input {
+            display: none;
+        }
+
+        .toggle-track {
+            position: absolute;
+            inset: 0;
+            background: var(--bg-deep);
+            border: 2px solid var(--border);
+        }
+
+        .toggle input:checked+.toggle-track {
+            background: var(--text);
+            border-color: var(--border);
+        }
+
+        .toggle-thumb {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--text);
+        }
+
+        .toggle input:checked~.toggle-thumb {
+            left: 30px;
+            background: var(--bg-deep);
+        }
+
+        /* Hero stats row */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .stat-item {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            padding: 14px 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* Current Status */
+        .current-status-bar {
+            margin-top: 20px;
+            padding: 14px 18px;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .current-status-bar .label {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .current-status-bar .value {
+            font-size: 18px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* ═══════════════════════════════════════════════
+           LOG STREAM
+           ═══════════════════════════════════════════════ */
+        .log-container {
+            background: var(--log-bg-start);
+            border: 2px solid var(--border);
+            padding: 0;
+            overflow: hidden;
+            box-shadow: var(--glow);
+        }
+
+        .log-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            border-bottom: 2px solid var(--border);
+            background: var(--bg-card);
+        }
+
+        .log-header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .log-header-dot {
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--border);
+            background: var(--text-muted);
+        }
+
+        .log-header-dot.r {
+            background: var(--bg-deep);
+        }
+
+        .log-header-dot.y {
+            background: var(--text-dim);
+        }
+
+        .log-header-dot.g {
+            background: var(--text);
+        }
+
+        .log-title {
+            font-size: 16px;
+            color: var(--text);
+            font-family: 'VT323', monospace;
+            margin-left: 8px;
+            text-transform: uppercase;
+        }
+
+        .log-body {
+            height: 240px;
+            overflow-y: auto;
+            padding: 14px 18px;
+            font-family: 'JetBrains Mono', 'VT323', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .log-body::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .log-body::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: 0px;
+        }
+
+        .log-line {
+            color: var(--text-dim);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .log-line .time {
+            color: var(--text-muted);
+        }
+
+        .log-line .icon-info {
+            color: #38bdf8;
+        }
+
+        .log-line .icon-success {
+            color: var(--green);
+        }
+
+        .log-line .icon-warn {
+            color: var(--yellow);
+        }
+
+        .log-line .icon-error {
+            color: var(--red);
+        }
+
+        .log-line .icon-status {
+            color: var(--neon);
+        }
+
+        .log-clear-btn {
+            background: var(--bg-deep);
+            border: 2px solid var(--border);
+            border-radius: 0px;
+            color: var(--text);
+            font-size: 11px;
+            padding: 4px 10px;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px 0px var(--border);
+        }
+
+        .log-clear-btn:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px 0px var(--border);
+        }
+
+        /* ═══════════════════════════════════════════════
+           SETTINGS
+           ═══════════════════════════════════════════════ */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+            text-shadow: 1px 1px 0px var(--text-muted);
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--form-input-bg);
+            border: 2px solid var(--border);
+            padding: 10px 14px;
+            color: var(--text);
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            outline: none;
+        }
+
+        .form-input:focus {
+            box-shadow: 4px 4px 0px 0px var(--border);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-secret-wrap {
+            position: relative;
+        }
+
+        .input-secret-wrap .form-input {
+            padding-right: 40px;
+        }
+
+        .secret-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .secret-toggle:hover {
+            opacity: 0.7;
+        }
+
+        .secret-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .form-select {
+            width: 100%;
+            background: var(--form-input-bg);
+            border: 2px solid var(--border);
+            padding: 10px 14px;
+            color: var(--text);
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            /* Uses a simple custom black/white arrow */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23aaaaaa' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 6l3.5 4 3.5-4H4.5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+        }
+
+        .form-select:focus {
+            box-shadow: 4px 4px 0px 0px var(--border);
+        }
+
+        .form-select option {
+            background: var(--bg-card-solid);
+            color: var(--text);
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* ═══════════════════════════════════════════════
+           DISCORD LIVE PREVIEW WIDGET (IMPROVED)
+           ═══════════════════════════════════════════════ */
+        .discord-preview-card {
+            background: var(--bg-card-solid);
+            border: 2px solid var(--border);
+            margin-bottom: 24px;
+            box-shadow: var(--glow);
+            position: relative;
+            font-family: 'JetBrains Mono', 'Segoe UI', monospace;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .dp-banner {
+            height: 60px;
+            background: repeating-linear-gradient(45deg,
+                    var(--bg-deep),
+                    var(--bg-deep) 10px,
+                    var(--border) 10px,
+                    var(--border) 12px);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .dp-header {
+            padding: 0 16px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            margin-top: -32px;
+            gap: 12px;
+        }
+
+        .dp-avatar-wrapper {
+            position: relative;
+            padding: 4px;
+            background: var(--bg-card-solid);
+            border-radius: 50%;
+        }
+
+        .dp-avatar {
+            width: 64px;
+            height: 64px;
+            background: var(--bg-deep);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .dp-status-dot {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 16px;
+            height: 16px;
+            background: var(--text);
+            border: 4px solid var(--bg-card-solid);
+            border-radius: 50%;
+        }
+
+        .dp-user-info {
+            padding-bottom: 12px;
+        }
+
+        .dp-username {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--text);
+            font-family: 'Press Start 2P', monospace;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+
+        .dp-username span {
+            font-size: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            font-weight: normal;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+
+        .dp-body {
+            padding: 16px;
+        }
+
+        .dp-section-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .dp-activity {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .dp-activity-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-deep);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .dp-activity-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow: hidden;
+        }
+
+        .dp-state {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dp-details {
+            font-size: 13px;
+            color: var(--text-dim);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dp-time {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .dp-buttons {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dp-button {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+            padding: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'JetBrains Mono', monospace;
+            width: 100%;
+        }
+
+        .dp-button:hover {
+            background: var(--text);
+            color: var(--bg-deep);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* ═══════════════════════════════════════════════
+           RETRO PERFORMANCE BAR
+           ═══════════════════════════════════════════════ */
+        .perf-widget {
+            margin-top: 24px;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            box-shadow: var(--glow);
+        }
+
+        .perf-block {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .perf-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .perf-label {
+            font-size: 14px;
+            color: var(--text);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .perf-val {
+            font-size: 14px;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .perf-bar-bg {
+            width: 100%;
+            height: 16px;
+            background: var(--bg-deep);
+            border: 2px solid var(--border);
+            position: relative;
+        }
+
+        .perf-bar-fill {
+            height: 100%;
+            background: var(--text);
+            transition: width 0.3s steps(10);
+        }
+
+        .perf-bar-fill.high {
+            background: var(--text);
+        }
+
+        .perf-bar-fill.med {
+            background: var(--text-muted);
+        }
+
+        .perf-bar-fill.low {
+            background: var(--text-dim);
+        }
+
+        /* Save Button */
+        .btn-primary {
+            background: var(--text);
+            color: var(--bg-deep);
+            border: 2px solid var(--border);
+            padding: 12px 28px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--glow);
+        }
+
+        .btn-primary:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--glow-strong);
+        }
+
+        .btn-primary:active {
+            transform: translate(2px, 2px);
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-deep);
+            color: var(--text);
+            border: 2px solid var(--border);
+            padding: 10px 20px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: var(--glow);
+        }
+
+        .btn-secondary:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--glow-strong);
+        }
+
+        .btn-secondary:active {
+            transform: translate(2px, 2px);
+            box-shadow: none;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        /* ═══════════════════════════════════════════════
+           TOAST
+           ═══════════════════════════════════════════════ */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--bg-card-solid);
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-family: 'Press Start 2P', monospace;
+            color: var(--text);
+            box-shadow: var(--glow-strong);
+            transform: translateY(80px);
+            opacity: 0;
+            transition: transform 0.2s steps(4), opacity 0.2s steps(4);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ═══════════════════════════════════════════════
+           VERSION TAG
+           ═══════════════════════════════════════════════ */
+        .version-tag {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Persona cards */
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .persona-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: var(--glow);
+        }
+
+        .persona-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--glow-strong);
+        }
+
+        .persona-card.selected {
+            background: var(--text);
+            color: var(--bg-deep);
+            border: 2px solid var(--border);
+        }
+
+        .persona-card.selected .persona-name,
+        .persona-card.selected .persona-desc {
+            color: var(--bg-deep);
+        }
+
+        .persona-icon {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+
+        .persona-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .persona-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ═══════════════════════════════════════════════
+           UPDATE BANNER
+           ═══════════════════════════════════════════════ */
+        .update-banner {
+            background: var(--bg-deep);
+            color: var(--text);
+            border: 2px solid var(--border);
+            padding: 12px 20px;
+            font-family: 'Press Start 2P', monospace;
+            margin-bottom: 24px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--glow);
+            animation: slideDown 0.5s ease;
+        }
+
+        .update-banner span {
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        .update-banner a {
+            color: var(--bg-deep);
+            background: var(--text);
+            padding: 8px 16px;
+            text-decoration: none;
+            border: 2px solid var(--border);
+            transition: all 0.2s;
+            font-size: 10px;
+        }
+
+        .update-banner a:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--glow-strong);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══════════ SIDEBAR ═══════════ -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">S</div>
+
+        <button class="nav-btn active" data-page="dashboard" title="Dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+        </button>
+
+        <button class="nav-btn" data-page="settings" title="Ayarlar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3" />
+                <path
+                    d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+            </svg>
+        </button>
+
+        <button class="nav-btn" data-page="logs" title="Loglar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
+            </svg>
+        </button>
+
+        <div class="sidebar-bottom">
+            <button class="nav-btn" id="themeBtn" title="Tema Değiştir" onclick="toggleTheme()"
+                style="margin-bottom: 20px;">
+                <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                    </path>
+                </svg>
+            </button>
+            <div class="version-tag">v3.0</div>
+        </div>
+    </nav>
+
+    <!-- ═══════════ MAIN CONTENT ═══════════ -->
+    <main class="main">
+
+        <!-- ─── DASHBOARD PAGE ─── -->
+        <div class="page active" id="page-dashboard">
+            <h1 class="page-title">⚡ <span>Dashboard</span></h1>
+
+            <!-- Hero Control Card -->
+            <div class="card hero-card">
+                <div class="hero-top">
+                    <div class="hero-status">
+                        <div class="status-dot" id="statusDot"></div>
+                        <div class="status-label">
+                            Bot Durumu: <span id="statusText">AKTİF</span>
+                            <small id="statusSince"></small>
+                        </div>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" id="botToggle" checked>
+                        <div class="toggle-track"></div>
+                        <div class="toggle-thumb"></div>
+                    </label>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="statUptime">00:00:00</div>
+                        <div class="stat-label">Uptime</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statCalls">0</div>
+                        <div class="stat-label">AI Çağrı</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statProvider">—</div>
+                        <div class="stat-label">Provider</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statPersona">—</div>
+                        <div class="stat-label">Persona</div>
+                    </div>
+                </div>
+
+                <div class="current-status-bar">
+                    <span class="label">📡 Discord:</span>
+                    <span class="value" id="currentDiscordStatus">Bağlantı bekleniyor...</span>
+                </div>
+            </div>
+
+            <!-- Discord Live Preview -->
+            <div class="discord-preview-card">
+                <div class="dp-banner"></div>
+                <div class="dp-header">
+                    <div class="dp-avatar-wrapper">
+                        <div class="dp-avatar">👾</div>
+                        <div class="dp-status-dot"></div>
+                    </div>
+                    <div class="dp-user-info">
+                        <div class="dp-username">StatusAI<span>#BOT</span></div>
+                    </div>
+                </div>
+                <div class="dp-body">
+                    <div class="dp-section-title">Oynuyor</div>
+                    <div class="dp-activity">
+                        <div class="dp-activity-icon">🎮</div>
+                        <div class="dp-activity-content">
+                            <div class="dp-state" id="previewState">Bağlanıyor...</div>
+                            <div class="dp-details" id="previewDetails">Detay bekleniyor</div>
+                            <div class="dp-time" id="previewTime">00:00 elapsed</div>
+                        </div>
+                    </div>
+                    <div class="dp-buttons">
+                        <button class="dp-button" id="previewButton" style="display: none;"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log Stream -->
+            <div class="log-container">
+                <div class="log-header">
+                    <div class="log-header-left">
+                        <div class="log-header-dot r"></div>
+                        <div class="log-header-dot y"></div>
+                        <div class="log-header-dot g"></div>
+                        <span class="log-title">statusai-terminal</span>
+                    </div>
+                    <button class="log-clear-btn" onclick="clearLogs()">Temizle</button>
+                </div>
+                <div class="log-body" id="logBody">
+                    <div class="log-line"><span class="time">[--:--:--]</span> <span class="icon-info">ℹ</span> StatusAI
+                        Dashboard yüklendi. Botu başlatmak için toggle'ı açın.</div>
+                </div>
+            </div>
+
+            <!-- Performance Widget -->
+            <div class="perf-widget">
+                <div class="perf-block">
+                    <div class="perf-header">
+                        <span class="perf-label">CPU Usage</span>
+                        <span class="perf-val" id="valCpu">0%</span>
+                    </div>
+                    <div class="perf-bar-bg">
+                        <div class="perf-bar-fill" id="barCpu" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="perf-block">
+                    <div class="perf-header">
+                        <span class="perf-label">RAM Config</span>
+                        <span class="perf-val" id="valRam">0 / 0 GB</span>
+                    </div>
+                    <div class="perf-bar-bg">
+                        <div class="perf-bar-fill" id="barRam" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── SETTINGS PAGE ─── -->
+        <div class="page" id="page-settings">
+            <h1 class="page-title">⚙️ <span>Ayarlar</span></h1>
+
+            <div class="settings-grid">
+                <!-- Left Column -->
+                <div>
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">🔑 API Yapılandırması</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">AI Provider</label>
+                            <select class="form-select" id="cfgProvider">
+                                <option value="groq">Groq</option>
+                                <option value="gemini">Google Gemini</option>
+                                <option value="openai">OpenAI</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">API Key</label>
+                            <div class="input-secret-wrap">
+                                <input type="password" class="form-input" id="cfgApiKey"
+                                    placeholder="sk-... veya gsk_...">
+                                <button class="secret-toggle" onclick="toggleSecret(this)">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">AI Model</label>
+                            <input type="text" class="form-input" id="cfgModel" placeholder="llama-3.3-70b-versatile">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Discord Client ID</label>
+                            <div class="input-secret-wrap">
+                                <input type="password" class="form-input" id="cfgClientId"
+                                    placeholder="1234567890123456789">
+                                <button class="secret-toggle" onclick="toggleSecret(this)">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">🔗 Discord Butonu</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Göster</label>
+                            <select class="form-select" id="cfgShowButton">
+                                <option value="true">Evet</option>
+                                <option value="false">Hayır</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Buton Etiketi</label>
+                            <input type="text" class="form-input" id="cfgButtonLabel" placeholder="⚡ StatusAI">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Buton URL</label>
+                            <input type="text" class="form-input" id="cfgButtonUrl"
+                                placeholder="https://github.com/...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">🎭 Persona Seçimi</span>
+                        </div>
+                        <div class="persona-grid" id="personaGrid">
+                            <!-- Populated via JS -->
+                        </div>
+
+                        <!-- Custom Persona Text Field -->
+                        <div id="customPersonaConfig" style="display: none; margin-top: 16px;">
+                            <label class="form-label">Özel Karakter (Custom) Metni</label>
+
+                            <!-- Quick select emojis -->
+                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <button class="btn-secondary" style="padding: 4px 8px; font-size: 14px;"
+                                    onclick="setCustomText('🛡️ Kıdemli Yazılım Mühendisi')">🛡️</button>
+                                <button class="btn-secondary" style="padding: 4px 8px; font-size: 14px;"
+                                    onclick="setCustomText('💰 Şirket CEO\'su')">💰</button>
+                                <button class="btn-secondary" style="padding: 4px 8px; font-size: 14px;"
+                                    onclick="setCustomText('🃏 İğneleyici Troll')">🃏</button>
+                            </div>
+
+                            <input type="text" class="form-input" id="cfgCustomText"
+                                placeholder="Örn: Asi, komik ve oyun bağımlısı bir hacker.">
+                            <div class="form-help" style="font-size: 11px; margin-top: 6px; color: var(--text-muted);">
+                                AI, durum mesajlarını üretirken bu karaktere aynen bürünecektir.</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">⏱️ Genel</span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Güncelleme Aralığı (sn)</label>
+                                <input type="number" class="form-input" id="cfgInterval" min="15" max="60" value="20">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Dil</label>
+                                <select class="form-select" id="cfgLanguage">
+                                    <option value="tr">Türkçe</option>
+                                    <option value="en">English</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Fallback Durum</label>
+                            <input type="text" class="form-input" id="cfgFallback"
+                                placeholder="💤 AFK — Birazdan dönerim.">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">🛡️ Kara Liste (Blacklist)</span>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Filtrelenecek Kelimeler (Virgülle Ayırın)</label>
+                            <textarea class="form-input" id="cfgBlacklist" rows="3"
+                                placeholder="Örn: pornhub, özel proje, gizlidosya"></textarea>
+                            <div class="form-help" style="font-size: 11px; margin-top: 6px; color: var(--text-muted);">
+                                Başlığında bu kelimeler geçen pencereler Discord'da "Gizli" olarak gösterilir.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-row">
+                        <button class="btn-primary" onclick="saveConfig()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
+                                <polyline points="17 21 17 13 7 13 7 21" />
+                                <polyline points="7 3 7 8 15 8" />
+                            </svg>
+                            Kaydet
+                        </button>
+                        <button class="btn-secondary" onclick="loadConfig()">Sıfırla</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── LOGS PAGE (Full Screen) ─── -->
+        <div class="page" id="page-logs">
+            <h1 class="page-title">📋 <span>Log Geçmişi</span></h1>
+            <div class="log-container">
+                <div class="log-header">
+                    <div class="log-header-left">
+                        <div class="log-header-dot r"></div>
+                        <div class="log-header-dot y"></div>
+                        <div class="log-header-dot g"></div>
+                        <span class="log-title">full-log-stream</span>
+                    </div>
+                    <button class="log-clear-btn" onclick="clearFullLogs()">Temizle</button>
+                </div>
+                <div class="log-body" id="logBodyFull" style="height: calc(100vh - 160px);">
+                    <div class="log-line"><span class="time">[--:--:--]</span> <span class="icon-info">ℹ</span> Tam log
+                        akışı burada görüntülenir.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        /* ═══════════════════════════════════════════════
+           STATE
+           ═══════════════════════════════════════════════ */
+        let eventSource = null;
+        let selectedPersona = 'custom';
+
+        /* ═══════════════════════════════════════════════
+           THEME TOGGLE
+           ═══════════════════════════════════════════════ */
+        function initTheme() {
+            const savedTheme = localStorage.getItem('statusai_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('statusai_theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            const iconSvg = theme === 'dark'
+                ? '<path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>'
+                : '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+            document.getElementById('themeIcon').innerHTML = iconSvg;
+        }
+
+        /* ═══════════════════════════════════════════════
+           NAVIGATION
+           ═══════════════════════════════════════════════ */
+        document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('page-' + btn.dataset.page).classList.add('active');
+            });
+        });
+
+        /* ═══════════════════════════════════════════════
+           BOT TOGGLE
+           ═══════════════════════════════════════════════ */
+        document.getElementById('botToggle').addEventListener('change', async function () {
+            const action = this.checked ? 'start' : 'stop';
+            try {
+                const res = await fetch('/api/toggle', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action })
+                });
+                const data = await res.json();
+                updateBotUI(data.running);
+                showToast(data.message);
+            } catch (e) {
+                showToast('Bağlantı hatası!');
+            }
+        });
+
+        function updateBotUI(running) {
+            const dot = document.getElementById('statusDot');
+            const text = document.getElementById('statusText');
+            const toggle = document.getElementById('botToggle');
+
+            if (running) {
+                dot.classList.remove('inactive');
+                text.textContent = 'AKTİF';
+                text.style.color = 'var(--green)';
+                toggle.checked = true;
+            } else {
+                dot.classList.add('inactive');
+                text.textContent = 'DURDURULDU';
+                text.style.color = 'var(--red)';
+                toggle.checked = false;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════
+           SSE LOG STREAM
+           ═══════════════════════════════════════════════ */
+        function connectSSE() {
+            if (eventSource) eventSource.close();
+            eventSource = new EventSource('/api/logs');
+
+            eventSource.onmessage = function (e) {
+                const data = JSON.parse(e.data);
+                appendLog(data);
+            };
+
+            eventSource.onerror = function () {
+                setTimeout(connectSSE, 3000);
+            };
+        }
+
+        function appendLog(data) {
+            const line = document.createElement('div');
+            line.className = 'log-line';
+
+            const iconClass = {
+                'info': 'icon-info', 'success': 'icon-success',
+                'warn': 'icon-warn', 'error': 'icon-error', 'status': 'icon-status'
+            }[data.type] || 'icon-info';
+
+            const icons = {
+                'info': 'ℹ', 'success': '✔', 'warn': '⚠', 'error': '✖', 'status': '♦'
+            };
+
+            line.innerHTML = `<span class="time">[${data.time}]</span> <span class="${iconClass}">${icons[data.type] || 'ℹ'}</span> ${escapeHtml(data.msg)}`;
+
+            // Add to both log areas
+            const main = document.getElementById('logBody');
+            const full = document.getElementById('logBodyFull');
+
+            main.appendChild(line.cloneNode(true));
+            full.appendChild(line);
+
+            // Auto-scroll & limit
+            if (main.children.length > 200) main.removeChild(main.firstChild);
+            if (full.children.length > 1000) full.removeChild(full.firstChild);
+
+            main.scrollTop = main.scrollHeight;
+            full.scrollTop = full.scrollHeight;
+
+            // Update current status if it's a status update
+            if (data.type === 'status' && data.msg) {
+                const cleaned = data.msg.replace(/^→\s*/, '');
+                document.getElementById('currentDiscordStatus').textContent = cleaned;
+            }
+        }
+
+        function clearLogs() { document.getElementById('logBody').innerHTML = ''; }
+        function clearFullLogs() { document.getElementById('logBodyFull').innerHTML = ''; }
+
+        /* ═══════════════════════════════════════════════
+           CONFIG
+           ═══════════════════════════════════════════════ */
+        async function loadConfig() {
+            try {
+                const res = await fetch('/api/config');
+                const cfg = await res.json();
+
+                document.getElementById('cfgProvider').value = cfg.ai_provider || 'groq';
+                document.getElementById('cfgApiKey').value = cfg.ai_api_key || '';
+                document.getElementById('cfgModel').value = cfg.ai_model || '';
+                document.getElementById('cfgClientId').value = cfg.discord_client_id || '';
+                document.getElementById('cfgInterval').value = cfg.update_interval || 20;
+                document.getElementById('cfgLanguage').value = cfg.language || 'tr';
+                document.getElementById('cfgFallback').value = cfg.fallback_status || '';
+                document.getElementById('cfgShowButton').value = cfg.show_button ? 'true' : 'false';
+                document.getElementById('cfgButtonLabel').value = cfg.button_label || '';
+                document.getElementById('cfgButtonUrl').value = cfg.button_url || '';
+
+                if (cfg.blacklist) {
+                    document.getElementById('cfgBlacklist').value = cfg.blacklist.join(', ');
+                } else {
+                    document.getElementById('cfgBlacklist').value = '';
+                }
+
+                // Persona
+                selectedPersona = cfg.persona || 'custom';
+                document.querySelectorAll('.persona-card').forEach(c => {
+                    c.classList.toggle('selected', c.dataset.persona === selectedPersona);
+                });
+
+                // Custom Persona Text
+                if (cfg.custom_persona_text) {
+                    document.getElementById('cfgCustomText').value = cfg.custom_persona_text;
+                }
+
+                // Show/hide custom config
+                const customConfig = document.getElementById('customPersonaConfig');
+                customConfig.style.display = selectedPersona === 'custom' ? 'block' : 'none';
+
+                // Stats
+                document.getElementById('statProvider').textContent = (cfg.ai_provider || '—').toUpperCase();
+                document.getElementById('statPersona').textContent = (cfg.persona || '—').toUpperCase();
+
+            } catch (e) {
+                showToast('Config yüklenemedi!');
+            }
+        }
+
+        async function saveConfig() {
+            const cfg = {
+                ai_provider: document.getElementById('cfgProvider').value,
+                ai_api_key: document.getElementById('cfgApiKey').value,
+                ai_model: document.getElementById('cfgModel').value,
+                discord_client_id: document.getElementById('cfgClientId').value,
+                update_interval: parseInt(document.getElementById('cfgInterval').value) || 20,
+                language: document.getElementById('cfgLanguage').value,
+                fallback_status: document.getElementById('cfgFallback').value,
+                persona: selectedPersona,
+                custom_persona_text: document.getElementById('cfgCustomText').value,
+                show_button: document.getElementById('cfgShowButton').value === 'true',
+                button_label: document.getElementById('cfgButtonLabel').value,
+                button_url: document.getElementById('cfgButtonUrl').value,
+                blacklist: document.getElementById('cfgBlacklist').value
+            };
+
+            try {
+                const res = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(cfg)
+                });
+                const data = await res.json();
+                showToast(data.message || 'Kaydedildi!');
+            } catch (e) {
+                showToast('Kaydetme hatası!');
+            }
+        }
+
+        // Persona selection
+        document.querySelectorAll('.persona-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.persona-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedPersona = card.dataset.persona;
+
+                // Toggle custom config visiblity
+                const customConfig = document.getElementById('customPersonaConfig');
+                if (selectedPersona === 'custom') {
+                    customConfig.style.display = 'block';
+                    customConfig.style.animation = 'slideIn 0.3s ease';
+                } else {
+                    customConfig.style.display = 'none';
+                }
+            });
+        });
+
+        /* ═══════════════════════════════════════════════
+           STATUS POLLING
+           ═══════════════════════════════════════════════ */
+        async function pollStatus() {
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                updateBotUI(data.running);
+
+                document.getElementById('statUptime').textContent = data.uptime || '00:00:00';
+                document.getElementById('statCalls').textContent = data.ai_calls || '0';
+
+                // Discord Live Preview Mapping
+                if (data.current_status) {
+                    const statusParts = data.current_status.split(' | ');
+                    const previewState = document.getElementById('previewState');
+                    const previewDetails = document.getElementById('previewDetails');
+
+                    if (statusParts.length > 0) {
+                        previewState.textContent = statusParts[0].replace('→ ', '');
+                        if (statusParts.length > 1) {
+                            previewDetails.textContent = statusParts[1];
+                        } else {
+                            previewDetails.textContent = '';
+                        }
+                    }
+
+                    document.getElementById('currentDiscordStatus').textContent = data.current_status.replace('→ ', '');
+                }
+
+                // Keep the elapsed time running mock
+                document.getElementById('previewTime').textContent = (data.uptime || '00:00:00') + ' elapsed';
+
+                // Display Button Mock if enabled in config
+                const btnConfig = document.getElementById('cfgShowButton').value === 'true';
+                const btnLabel = document.getElementById('cfgButtonLabel').value;
+                const previewBtn = document.getElementById('previewButton');
+
+                if (btnConfig && btnLabel) {
+                    previewBtn.style.display = 'block';
+                    previewBtn.textContent = btnLabel;
+                } else {
+                    previewBtn.style.display = 'none';
+                }
+
+            } catch (e) { /* silent */ }
+        }
+
+        /* ═══════════════════════════════════════════════
+           HELPERS
+           ═══════════════════════════════════════════════ */
+        function setCustomText(text) {
+            document.getElementById('cfgCustomText').value = text;
+        }
+
+        function toggleSecret(btn) {
+            const input = btn.parentElement.querySelector('input');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        /* ═══════════════════════════════════════════════
+           PERFORMANCE POLLING
+           ═══════════════════════════════════════════════ */
+        async function pollPerformance() {
+            try {
+                const res = await fetch('/api/performance');
+                const data = await res.json();
+
+                // CPU
+                const cpuEl = document.getElementById('barCpu');
+                const cpuVal = document.getElementById('valCpu');
+                if (cpuEl && cpuVal) {
+                    cpuEl.style.width = data.cpu + '%';
+                    cpuVal.textContent = data.cpu + '%';
+                }
+
+                // RAM
+                const ramEl = document.getElementById('barRam');
+                const ramVal = document.getElementById('valRam');
+                if (ramEl && ramVal) {
+                    ramEl.style.width = data.ram_percent + '%';
+                    ramVal.textContent = data.ram_gb + ' / ' + data.ram_total + ' GB';
+                }
+
+            } catch (e) { /* silent */ }
+        }
+
+        /* ═══════════════════════════════════════════════
+           AUTO-UPDATER POLLING
+           ═══════════════════════════════════════════════ */
+        async function checkUpdate() {
+            try {
+                const res = await fetch('/api/check_update');
+                const data = await res.json();
+
+                if (data.update_available) {
+                    const banner = document.getElementById('updateBanner');
+                    document.getElementById('ubVersion').textContent = data.latest_version;
+                    document.getElementById('ubLink').href = data.release_url;
+                    banner.style.display = 'flex';
+                }
+            } catch (e) {
+                console.error("Update check failed", e);
+            }
+        }
+
+        /* ═══════════════════════════════════════════════
+           INIT
+           ═══════════════════════════════════════════════ */
+        initTheme();
+        loadConfig();
+        connectSSE();
+        pollStatus();
+        pollPerformance();
+        checkUpdate(); // Run once on startup
+        setInterval(pollStatus, 5000);
+        setInterval(pollPerformance, 3000); // 3 sec for performance
+    </script>
+</body>
+
+</html>
