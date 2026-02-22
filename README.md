@@ -1,8 +1,8 @@
 <p align="center">
-  <h1 align="center">⚡ StatusAI</h1>
+  <h1 align="center">⚡ StatusAI v3.0.0</h1>
   <p align="center">
-    <strong>AI-Powered Discord Rich Presence</strong><br>
-    Bilgisayarındaki aktif pencereleri takip edip, AI ile havalı durum mesajları yayınla.
+    <strong>AI-Powered Discord Rich Presence & Masaüstü Uygulaması</strong><br>
+    Bilgisayarındaki aktif pencereleri takip edip, AI ile havalı durum mesajları yayınla. Artık yepyeni 8-bit retro arayüzü ve yerleşik otomatik güncelleme sistemiyle!
   </p>
   <p align="center">
     <img src="https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white" alt="Python">
@@ -13,11 +13,13 @@
 
 ---
 
-## 🚀 Ne Yapıyor?
+## 🚀 StatusAI Nedir?
 
-StatusAI, bilgisayarında hangi uygulamanın açık olduğunu algılayıp, AI (Gemini, OpenAI veya Groq) kullanarak Discord profilinde **esprili, teknik ve karizmatik** durum mesajları yayınlar.
+StatusAI, bilgisayarında hangi uygulamanın veya oyunun açık olduğunu algılayıp, AI (Gemini, OpenAI veya Groq) kullanarak Discord profilinde **esprili, teknik ve karizmatik** durum mesajları yayınlayan akıllı bir masaüstü aracıdır.
 
-**Örnek çıktılar:**
+Sürüm **3.0.0** ile birlikte artık terminal siyah ekranlarından kurtulup; performans sensörleri, Discord Live Preview (Canlı Önizleme), Kara Liste filtreleme ve Dinamik Persona seçimi gibi devasa yenilikleri barındıran **tamamen bağımsız bir Webview Masaüstü (.exe)** uygulaması haline geldi!
+
+**Örnek AI durum çıktıları:**
 ```
 ⚡ Auth sistemini hackliyor... şaka, yazıyorum
 🎵 Spotify + Code = Tanrı modu aktif
@@ -25,136 +27,93 @@ StatusAI, bilgisayarında hangi uygulamanın açık olduğunu algılayıp, AI (G
 🎮 Ranked'da carry, hayatta da carry
 ```
 
-## ✨ Özellikler
+---
 
-| Özellik | Açıklama |
-|---------|----------|
-| 🖥️ **Akıllı Takip** | VS Code, Spotify, Browser, Oyunlar ve daha fazlasını otomatik algılar |
-| 🤖 **AI Entegrasyonu** | Gemini, OpenAI veya Groq ile anlık status üretimi |
-| 🎮 **Oyun Tespiti** | VALORANT, LoL, CS2, GTA V, Minecraft... otomatik tanır |
-| 📁 **VS Code Detayı** | Hangi dosyayı ve projeyi düzenlediğinizi yakalar |
-| 🎵 **Spotify Desteği** | Dinlediğiniz şarkıyı status'a yansıtır |
-| 🔄 **Dinamik Güncelleme** | Her 15-30 saniyede otomatik yenileme |
-| 🛡️ **Hata Toleransı** | İnternet koparsa offline moda geçer, kapanmaz |
-| ⚡ **Önbellek** | Aynı aktivite tekrarında API'yi boşuna çağırmaz |
+## ✨ v3.0.0 Yeni Özellikler
+
+### 🕹️ 8-Bit Retro Dashboard
+Uygulama artık tamamen görsel, karanlık mod ve 8-bit / piksel sanat tasarım diline sahip havalı bir arayüze (Dashboard) sahip! Menüler arası geçiş, log ekranı, konfigürasyon ve daha fazlası.
+
+### 👾 Discord Live Preview Widget
+Discord arayüzünü birebir taklit eden, arka plandaki AI motorunun ne tür bir durum (status) ürettiğini, ne kadar süredir çalıştığını (Uptime) gerçek zamanlı ve canlı olarak gösteren bir eklenti penceresi eklendi.
+
+### 🛡️ Gizlilik ve Kara Liste (Blacklist) Sistemi
+Ayarlar menüsüne eklenen **Kara Liste** alanına virgülle ayırarak girdiğiniz kelimeler (örn: *Banka, Özel, Şifre*) takip edilen pencere ismiyle eşleşirse, StatusAI otomatik olarak kendini gizler ve Discord'da uygulamanızı "Gizli (Hidden)" olarak gösterir. Böylece istemediğiniz pencereler başkaları tarafından asla görülmez.
+
+### 🎭 Dinamik Karakterler (Personalar)
+Artık AI'ın senin adına atacağı mesajların üslubunu tek tuşla seçebilirsin!
+* **Geliştirici:** Teknik, kod üzerine ve esprili.
+* **Agresif:** Sert, rekabetçi (Oyunlar için harika).
+* **Şairane:** Edebi ve sanatsal bir ton.
+* **Özel:** %100 kendi belirleyeceğin komutlarla!
+
+### 📊 Canlı Performans Monitörü
+Arayüzün içerisindeki sekmelerde anlık olarak CPU (işlemci) ve RAM kullanım yüzdeleri 8-bit bir ilerleme çubuğuyla saniyede bir güncellenir. Ayrı bir görev yöneticisi açmana gerek kalmaz.
+
+### 🔄 Otomatik Güncelleyici (Auto-Updater)
+Senin hiçbir şey indirmene gerek kalmadan; StatusAI açıldığında **GitHub üzerinden** yeni sürüm kontrolü yapar. Eğer yayınlanmış yeni bir versiyon bulursa, yukarıdan aşağıya şık bir "Yeni Sürüm Mevcut!" bildirim banner'ı indirir ve tek tıkla yeni .exe'yi almanı sağlar.
+
+### 📦 Kurulumsuz "Tek Tıkla" Kullanım (.exe)
+Eski sürümlerdeki Python kurulum eziyeti tamamen kaldırıldı. Artık tek bir **StatusAI.exe** dosyası olarak sunuluyor. Çalıştırıldığında masaüstü penceresi açılır, kapatılırsa **sistem tepsisine (sağ alt köşe)** yerleşerek arka planda güç tüketmeden sessizce çalışmaya devam eder.
 
 ---
 
-## 📦 Kurulum
+## 💻 Kurulum ve Kullanım
 
-### 1. Gereksinimler
+### Yöntem 1: Doğrudan Executable (Önerilen)
 
-- **Python 3.10+** — [İndir](https://www.python.org/downloads/)
-- **Discord Masaüstü Uygulaması** — Açık olmalı
+Eğer sadece programı kullanmak istiyorsan, kodlarla uğraşmana gerek yok:
+1. GitHub deposundaki **Releases (Sürümler)** sekmesine git.
+2. En güncel **StatusAI_v3.0.0.exe** dosyasını indir.
+3. Çift tıkla ve çalıştır! (Windows Defender ilk açılışta uyarı verebilir, "Yine de Çalıştır" demen yeterli).
+4. Arayüz açılınca `Ayarlar` menüsünden **Discord Client ID** ve **AI API Key** (örn: Gemini/Groq) girip kaydet.
+5. Ana ekrandan botu Başlat!
 
-### 2. Bağımlılıkları Yükle
+### Yöntem 2: Kaynak Kodundan Çalıştırma / Geliştirme
 
-```bash
-pip install -r requirements.txt
-```
+Koda müdahale etmek, kendi `build` (derleme) işlemini yapmak istersen:
 
-### 3. Discord Uygulama Oluştur
-
-1. [Discord Developer Portal](https://discord.com/developers/applications) adresine git
-2. **"New Application"** butonuna tıkla
-3. Uygulamaya bir isim ver (örn: `StatusAI`)
-4. Sol menüden **"OAuth2"** > **"General"** sayfasına git
-5. **"Application ID"** numarasını kopyala — bu senin `discord_client_id` değerin
-
-> **İpucu:** Rich Presence'ta büyük resim göstermek istiyorsan, sol menüden **"Rich Presence"** > **"Art Assets"** kısmına `logo` adında bir görsel yükle.
-
-### 4. Config Dosyasını Düzenle
-
-`config.json` dosyasını aç ve bilgilerini gir:
-
-```json
-{
-    "discord_client_id": "123456789012345678",
-    "ai_provider": "gemini",
-    "ai_api_key": "AIza...",
-    "ai_model": "gemini-2.0-flash",
-    "persona": "Karizmatik bir senior developer, esprili ve teknik",
-    "language": "tr",
-    "update_interval": 20,
-    "fallback_status": "💤 AFK — Birazdan dönerim."
-}
-```
-
-| Alan | Açıklama |
-|------|----------|
-| `discord_client_id` | Discord Developer Portal'dan aldığın Application ID |
-| `ai_provider` | `"gemini"`, `"openai"` veya `"groq"` |
-| `ai_api_key` | Gemini, OpenAI veya Groq API anahtarın |
-| `ai_model` | Kullanılacak model (varsayılan: `gemini-2.0-flash`) |
-| `persona` | AI'ın karakteri — durum mesajlarının tonu buna göre şekillenir |
-| `language` | Mesaj dili: `tr`, `en`, `de`, `fr`, `es` |
-| `update_interval` | Kaç saniyede bir güncelleme yapılacak (15-60) |
-| `fallback_status` | API hata verdiğinde gösterilecek statik mesaj |
-| `tracked_apps` | Takip edilecek uygulamalar (process adı → görünen ad) |
-
-### 5. Çalıştır
-
-```bash
-python main.py
-```
+1. **Gereksinimler:** Python 3.10+ yüklü olmalı.
+2. Depoyu klonla:
+   ```bash
+   git clone https://github.com/v1onues/StatusAI.git
+   cd StatusAI
+   ```
+3. Bağımlılıkları yükle:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Kendi `StatusAI.exe` dosyanı derlemek ve üretmek için hazır betiği çalıştır:
+   ```bash
+   python build.py
+   ```
+   *Not: İşlem bittiğinde `dist` klasörü içerisinde tamamen entegre `.exe` dosyası bulunacaktır.*
 
 ---
 
-## 🎯 AI Provider Seçimi
+## 🔑 Discord Application Nasıl Kurulur?
 
-### Google Gemini (Önerilen)
-- **Ücretsiz katman** mevcut — düşük hacimli kullanım için ideal
-- API Key al: [Google AI Studio](https://aistudio.google.com/apikey)
-- `config.json`'da:
-  ```json
-  "ai_provider": "gemini",
-  "ai_model": "gemini-2.0-flash"
-  ```
-
-### OpenAI
-- API Key al: [OpenAI Platform](https://platform.openai.com/api-keys)
-- `config.json`'da:
-  ```json
-  "ai_provider": "openai",
-  "ai_model": "gpt-4o-mini"
-  ```
-
-### Groq (Ultra-Hızlı)
-- **Ücretsiz katman** mevcut — en hızlı inference
-- API Key al: [Groq Console](https://console.groq.com/keys)
-- `config.json`'da:
-  ```json
-  "ai_provider": "groq",
-  "ai_model": "llama-3.3-70b-versatile"
-  ```
+1. [Discord Developer Portal](https://discord.com/developers/applications) adresine git.
+2. **"New Application"** butonuna tıkla.
+3. Uygulamaya havalı bir isim ver.
+4. Sol taraftan **"OAuth2" -> "General"** sekmesindeki **"Application ID"** kopyala.
+5. Bu numarayı StatusAI penceresindeki **Ayarlar -> Discord Client ID** alanına yapıştır!
 
 ---
 
-## 🛠️ Sorun Giderme
+## 🛠️ Mimari ve Teknolojiler
 
-| Sorun | Çözüm |
-|-------|-------|
-| `Discord'a bağlanılamadı` | Discord uygulamasının açık olduğundan emin ol |
-| `config.json parse hatası` | JSON formatını kontrol et (virgüller, tırnak işaretleri) |
-| `API Key hatası` | API anahtarının doğru ve aktif olduğunu kontrol et |
-| `Durum gözükmüyor` | Discord ayarlarından **Activity Status** açık olmalı |
-
----
-
-## 📂 Proje Yapısı
-
-```
-StatusAI/
-├── main.py          # Ana orkestratör — RPC döngüsü
-├── trackers.py      # Pencere ve süreç takipçisi
-├── ai_engine.py     # AI durum mesajı üreticisi
-├── config.json      # Kullanıcı ayarları
-├── requirements.txt # Python bağımlılıkları
-└── README.md        # Bu dosya
-```
+* **Frontend:** Vanilla JS, CSS3, DOM API (Siyah Beyaz minimalist 8-bit / Pixel-art konsepti).
+* **Backend:** Python, Flask (Lokal mikro-sunucu), PyWebview, Threading (`.exe` içinde lokal porttan çalışır).
+* **AI Engine:** Google Gemini, Groq, OpenAI API'ları.
+* **Sistem Takibi:** ctypes (Windows API), psutil, win32gui.
+* **Paketleme:** PyInstaller (Standalone binary compiler).
+* **Sistem Tepsisi:** PyStray, Pillow.
 
 ---
 
-<p align="center">
-  <sub>Made with ⚡ by StatusAI</sub>
-</p>
+## 🤝 Katkıda Bulunun
+
+Projeye katkı sağlamaktan çekinmeyin! Yeni özellikler eklemek, farklı diller / temalar tasarlamak (Örn: Anime teması, Cyberpunk vs.) veya hataları bildirmek isterseniz "Pull Request" veya "Issues" sekmesini kullanabilirsiniz.
+
+Güle güle, afiyetle status atın! 🎉
