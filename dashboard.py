@@ -14,6 +14,12 @@ import json
 import os
 import os
 import sys
+
+# Force UTF-8 output on Windows to prevent charmap crashes with emojis
+if sys.stdout and hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if sys.stderr and hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 import threading
 import time
 import webbrowser
