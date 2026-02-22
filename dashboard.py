@@ -132,13 +132,37 @@ class ConfigManager:
         self._config: dict = {}
         self._last_modified: float = 0
 
+    _DEFAULT_CONFIG = {
+        "discord_client_id": "",
+        "ai_provider": "gemini",
+        "ai_api_key": "",
+        "ai_model": "gemini-2.0-flash",
+        "persona": "custom",
+        "custom_persona_text": "Karizmatik bir senior developer, esprili ve teknik",
+        "language": "tr",
+        "update_interval": 20,
+        "fallback_status": "💤 AFK — Birazdan dönerim.",
+        "tracked_apps": {},
+        "show_button": False,
+        "button_label": "",
+        "button_url": "",
+        "blacklist": [],
+    }
+
     def load(self) -> dict:
+        # Auto-create default config on first launch
+        if not self._path.exists():
+            with open(self._path, "w", encoding="utf-8") as f:
+                json.dump(self._DEFAULT_CONFIG, f, indent=4, ensure_ascii=False)
+            print(f"[StatusAI] Varsayılan config oluşturuldu: {self._path}")
+
         with open(self._path, "r", encoding="utf-8") as f:
             self._config = json.load(f)
 
-        for key in ("discord_client_id", "ai_api_key"):
-            if not self._config.get(key):
-                raise ValueError(f"config.json'da '{key}' alanını doldurun!")
+        # Don't crash on first launch — let user fill these via the Dashboard UI
+        # for key in ("discord_client_id", "ai_api_key"):
+        #     if not self._config.get(key):
+        #         raise ValueError(f"config.json'da '{key}' alanını doldurun!")
 
         self._config.setdefault("ai_provider", "gemini")
         self._config.setdefault("ai_model", "gemini-2.0-flash")
