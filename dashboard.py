@@ -14,12 +14,34 @@ import json
 import os
 import os
 import sys
+import io
 
-# Force UTF-8 output on Windows to prevent charmap crashes with emojis
-if sys.stdout and hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-if sys.stderr and hasattr(sys.stderr, "reconfigure"):
-    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+# ── Bulletproof UTF-8 fix for Windows / PyInstaller --windowed mode ──
+# In windowed mode, stdout/stderr can be None or a broken handle that uses
+# the system's legacy codepage (cp1254 on Turkish Windows). This crashes
+# whenever an emoji or special char is printed. Fix it globally here.
+import os
+
+os.environ["PYTHONUTF8"] = "1"
+
+
+def _safe_utf8_stream(stream):
+    """Return a UTF-8 text stream, no matter what."""
+    if stream is None:
+        return open(os.devnull, "w", encoding="utf-8", errors="replace")
+    try:
+        stream.reconfigure(encoding="utf-8", errors="replace")
+        return stream
+    except Exception:
+        pass
+    try:
+        return io.TextIOWrapper(stream.buffer, encoding="utf-8", errors="replace")
+    except Exception:
+        return open(os.devnull, "w", encoding="utf-8", errors="replace")
+
+
+sys.stdout = _safe_utf8_stream(sys.stdout)
+sys.stderr = _safe_utf8_stream(sys.stderr)
 import threading
 import time
 import webbrowser
