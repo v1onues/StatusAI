@@ -112,6 +112,28 @@ Koda müdahale etmek, kendi `build` (derleme) işlemini yapmak istersen:
 
 ---
 
+## 📡 GitHub Profiline Canlı Durum Ekleme (Koleth Presence) 💎
+
+StatusAI'nın en can alıcı yan özelliklerinden biri, Discord durumunuzu anlık olarak GitHub profilinizde (README) jilet gibi bir kart olarak göstermenize olanak tanımasıdır!
+
+### 1. Kurulum ve Hazırlık
+Discord API kısıtlamaları gereği, Discord botunun sizi "Online" görebilmesi ve anlık statuslarınızı çekebilmesi için botla en az bir ortak sunucuda bulunmanız gerekir.
+👉 **[Koleth Discord Sunucusuna Katıl](https://discord.gg/koleth)**
+
+### 2. README Dosyasına Kartı Ekleyin
+Kendi GitHub profilinize gidip (kullanıcı adınızla aynı olan depo), `README.md` dosyasını açın ve şu kodu istediğiniz yere yapıştırın:
+
+```html
+<p align="center">
+  <img src="https://koleth-presence.vercel.app/api/presence/SENIN_DISCORD_ID_BURAYA" alt="My Live Status" />
+</p>
+```
+*(Not: URL'deki `SENIN_DISCORD_ID_BURAYA` kısmını kendi gerçek 18 haneli Discord numaranla değiştirmeyi unutma!)*
+
+> **🔥 Pro Tip:** Linkin sonuna `?v=1` gibi rastgele değerler ekleyerek (örn: `.../ID?v=2`) GitHub'ın sinir bozucu görsel önbelleğini (cache) istediğiniz zaman kırabilir ve durumunuzu saniyesinde GitHub profilinizde güncelleyebilirsiniz.
+
+---
+
 ## 🤝 Katkıda Bulunun
 
 Projeye katkı sağlamaktan çekinmeyin! Yeni özellikler eklemek, farklı diller / temalar tasarlamak (Örn: Anime teması, Cyberpunk vs.) veya hataları bildirmek isterseniz "Pull Request" veya "Issues" sekmesini kullanabilirsiniz.
