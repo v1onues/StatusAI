@@ -699,7 +699,7 @@ def main():
     # ── 4. Create native window (blocks main thread) ──
     print(f"[StatusAI] Uygulama penceresi açılıyor...")
     print(f"[StatusAI] Pencereyi kapatırsan bot arka planda çalışmaya devam eder.")
-    print(f"[StatusAI] Tamamen kapatmak için: Sağ alt tray ikonu → Tamamen Kapat\n")
+    print("[StatusAI] Tamamen kapatmak icin: Sag alt tray ikonu -> Tamamen Kapat\n")
 
     _webview_window = webview.create_window(
         title="StatusAI — Dashboard",
