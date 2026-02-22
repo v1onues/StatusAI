@@ -339,14 +339,14 @@ class BotEngine:
 
                 if new_status != self._current_status:
                     self._current_status = new_status
-                    self._log("status", f"→ {self._current_status}")
+                    self._log("status", f"-> {self._current_status}")
 
                     # Log to file
                     try:
                         ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         with open(LOG_FILE, "a", encoding="utf-8") as f:
                             f.write(
-                                f'[{ts}] {context_prompt} → "{self._current_status}"\n'
+                                f'[{ts}] {context_prompt} -> "{self._current_status}"\n'
                             )
                     except Exception:
                         pass
@@ -384,8 +384,19 @@ class BotEngine:
                             buttons=buttons,
                         )
                         self._log("success", "Discord güncellendi!")
+                    except (ConnectionError, RuntimeError) as e:
+                        self._log("warn", f"RPC hatasi: {e}")
+                        # Auto-reconnect on pipe drop
+                        try:
+                            self._log("info", "RPC yeniden baglaniliyor...")
+                            self._rpc.close()
+                            self._rpc = DiscordRPC(config["discord_client_id"])
+                            self._rpc.connect()
+                            self._log("success", "RPC yeniden baglandi!")
+                        except Exception as re_err:
+                            self._log("error", f"Yeniden baglanti basarisiz: {re_err}")
                     except Exception as e:
-                        self._log("warn", f"RPC hatası: {e}")
+                        self._log("warn", f"RPC hatasi: {e}")
 
                 last_ctx = ctx
                 self._stop_event.wait(interval)

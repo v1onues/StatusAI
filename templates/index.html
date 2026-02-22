@@ -1236,19 +1236,7 @@
                             <input type="text" class="form-input" id="cfgModel" placeholder="llama-3.3-70b-versatile">
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Discord Client ID</label>
-                            <div class="input-secret-wrap">
-                                <input type="password" class="form-input" id="cfgClientId"
-                                    placeholder="1234567890123456789">
-                                <button class="secret-toggle" onclick="toggleSecret(this)">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                        <circle cx="12" cy="12" r="3" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
+
                     </div>
 
                     <div class="card">
@@ -1535,7 +1523,7 @@
                 document.getElementById('cfgProvider').value = cfg.ai_provider || 'groq';
                 document.getElementById('cfgApiKey').value = cfg.ai_api_key || '';
                 document.getElementById('cfgModel').value = cfg.ai_model || '';
-                document.getElementById('cfgClientId').value = cfg.discord_client_id || '';
+
                 document.getElementById('cfgInterval').value = cfg.update_interval || 20;
                 document.getElementById('cfgLanguage').value = cfg.language || 'tr';
                 document.getElementById('cfgFallback').value = cfg.fallback_status || '';
@@ -1578,7 +1566,7 @@
                 ai_provider: document.getElementById('cfgProvider').value,
                 ai_api_key: document.getElementById('cfgApiKey').value,
                 ai_model: document.getElementById('cfgModel').value,
-                discord_client_id: document.getElementById('cfgClientId').value,
+
                 update_interval: parseInt(document.getElementById('cfgInterval').value) || 20,
                 language: document.getElementById('cfgLanguage').value,
                 fallback_status: document.getElementById('cfgFallback').value,

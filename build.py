@@ -41,6 +41,7 @@ def run_build():
         "pyinstaller",
         "--noconfirm",
         "--onefile",
+        "--windowed",
         "--name",
         "StatusAI",
         f"--add-data=templates{data_separator}templates",
@@ -59,7 +60,7 @@ def run_build():
     ]
 
     if icon_param:
-        cmd.insert(4, icon_param)
+        cmd.insert(-1, icon_param)
 
     try:
         subprocess.check_call(cmd)
