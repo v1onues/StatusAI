@@ -41,7 +41,6 @@ def run_build():
         "pyinstaller",
         "--noconfirm",
         "--onefile",
-        "--windowed",  # Equivalent to --noconsole, hides the CMD window
         "--name",
         "StatusAI",
         f"--add-data=templates{data_separator}templates",

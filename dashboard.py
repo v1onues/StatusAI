@@ -37,11 +37,16 @@ from ai_engine import generate_status, get_stats
 # ──────────────────────────────────────────────
 #  Constants
 # ──────────────────────────────────────────────
-# Determine the true base directory (where the .exe is running from, not the Temp extraction folder)
-if getattr(sys, "frozen", False):
-    BASE_DIR = Path(sys.executable).parent
+# Determine the true base directory (APPDATA for configs)
+# This ensures that configs and logs are carried over and never wiped during .exe updates
+appdata_dir = os.environ.get("APPDATA")
+if appdata_dir:
+    BASE_DIR = Path(appdata_dir) / "StatusAI"
 else:
-    BASE_DIR = Path(__file__).parent
+    BASE_DIR = Path.home() / "StatusAI"
+
+# Ensure the folder exists
+BASE_DIR.mkdir(parents=True, exist_ok=True)
 
 VERSION = "3.0.0"
 CONFIG_FILE = BASE_DIR / "config.json"
